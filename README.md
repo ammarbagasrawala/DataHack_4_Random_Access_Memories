@@ -31,3 +31,5 @@ queries are highly reliable_
 # Usage:
 1. Check test.ipynb for testing work and understanding
 2. Use final.py file to run UI
+
+# Navigate to master branch for more information and insights
