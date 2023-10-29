@@ -29,5 +29,5 @@ queries are highly reliable_
 **bleu**: https://huggingface.co/spaces/evaluate-metric/bleu
 
 # Usage:
-Check test.ipynb for testing work and understanding
-Use final.py file to run UI
+1. Check test.ipynb for testing work and understanding
+2. Use final.py file to run UI
