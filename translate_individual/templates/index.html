@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Translation</title>
+</head>
+<body>
+    <h1>Text Translation</h1>
+    <form id="translationForm">
+        <label for="source_text">Enter your text:</label>
+        <textarea id="source_text" rows="4" cols="50"></textarea>
+        
+        <label for="target_lang">Select the target language:</label>
+        <select id="target_lang">
+            <option value="fra_Latn">French</option>
+            <option value="hin_Deva">Hindi</option>
+            <option value="spa_Latn">Spanish</option>
+        </select>
+        
+        <button type="button" id="translateButton">Translate</button>
+    </form>
+    
+    <h2>Translation Result:</h2>
+    <div id="translationResult"></div>
+
+    <script>
+        const translateButton = document.getElementById('translateButton');
+        const sourceText = document.getElementById('source_text');
+        const targetLang = document.getElementById('target_lang');
+        const translationResult = document.getElementById('translationResult');
+        
+        translateButton.addEventListener('click', () => {
+            const sourceTextValue = sourceText.value;
+            const targetLangValue = targetLang.value;
+
+            fetch('/translate', {
+                method: 'POST',
+                body: new URLSearchParams({ source_text: sourceTextValue, target_lang: targetLangValue }),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                translationResult.textContent = data.translation;
+            });
+        });
+    </script>
+</body>
+</html>

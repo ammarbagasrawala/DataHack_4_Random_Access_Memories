@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Upload and Query to ChatPDF</title>
+</head>
+<body>
+    <h1>Upload a PDF to Query your PDF</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".pdf" id="fileInput">
+        <button type="button" id="uploadButton">Upload</button>
+    </form>
+    <div id="result"></div>
+
+    <h2>Ask Queries</h2>
+    <input type="text" id="queryInput" placeholder="Enter your query">
+    <button type="button" id="queryButton">Submit Query</button>
+    <div id="queryResult"></div>
+
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function () {
+            const fileInput = document.getElementById('fileInput');
+            const resultDiv = document.getElementById('result');
+            const uploadForm = document.getElementById('uploadForm');
+
+            if (fileInput.files.length === 0) {
+                resultDiv.innerHTML = 'Please select a PDF file to upload.';
+                return;
+            }
+
+            const formData = new FormData(uploadForm);
+            const api_key = 'sec_xxx'; // Replace with your ChatPDF API key
+
+            fetch('https://api.chatpdf.com/v1/sources/add-file', {
+                method: 'POST',
+                headers: {
+                    'x-api-key': api_key,
+                },
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    resultDiv.innerHTML = `Source ID: ${data.sourceId}`;
+                    // const sourceId = data.sourceId
+                    // resultDiv.innerHTML = data.sourceId;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `Error: ${error.message}`;
+                });
+        });
+
+        document.getElementById('queryButton').addEventListener('click', function () {
+            const queryInput = document.getElementById('queryInput');
+            const queryResultDiv = document.getElementById('queryResult');
+            const sourceId = document.getElementById('result').textContent.split(':')[1].trim();
+            const query = queryInput.value;
+            const api_key = 'sec_rUHm4oLc9CqCYqnOkjHDK6TInXZ01LMW'; // Replace with your ChatPDF API key
+
+            if (!query || !sourceId) {
+                queryResultDiv.innerHTML = 'Please upload a PDF and enter a query.';
+                return;
+            }
+
+            fetch('https://api.chatpdf.com/v1/chats/message', {
+                method: 'POST',
+                headers: {
+                    'x-api-key': api_key,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sourceId: sourceId,
+                    messages: [
+                        {
+                            role: 'user',
+                            content: query,
+                        }
+                    ],
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    queryResultDiv.innerHTML = `Result: ${data.content}`;
+                })
+                .catch(error => {
+                    queryResultDiv.innerHTML = `Error: ${error.message}`;
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Query</title>
+</head>
+<body>
+    <h1>Upload a PDF and Query</h1>
+    <form method="POST" action="/query" enctype="multipart/form-data">
+        <input type="file" name="pdf" accept=".pdf" required>
+        <input type="text" name="query" placeholder="Enter your query" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/query', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `Answer: ${data.answer}`;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+    </script>
+</body>
+</html>
