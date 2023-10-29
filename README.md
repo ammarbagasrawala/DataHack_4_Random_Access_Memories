@@ -28,3 +28,6 @@ queries are highly reliable_
 # Metric:
 **bleu**: https://huggingface.co/spaces/evaluate-metric/bleu
 
+# Usage:
+Check test.ipynb for testing work and understanding
+Use final.py file to run UI
